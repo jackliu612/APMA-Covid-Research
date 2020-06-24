@@ -4,6 +4,11 @@
 * Run `git clone https://github.com/jackliu612/APMA-Covid-Research.git` This will download the repository and create a new directory with all of the files
 * After you have cloned, you can use `git pull` to download and merge any future changes instead of cloning again. More on this below. 
 
+## How to Run
+* Make sure python is installed
+* Run `pip instal -r requirements.txt` to install needed dependencies
+* Run `jupyter notebook` to open up a webpage where you can find notebooks 
+
 ## How to make changes
 1. Save any local changes that you have made and want to push 
 2. Run the following commands in the terminal after locating to the base directory (APMA-Covid-Research)
