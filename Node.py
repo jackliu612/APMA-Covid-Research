@@ -14,7 +14,7 @@ class Node:
         """
         Contact tracing method. Takes in a parameter to do a complete tracing or not (whether to have broken links)
         """
-        if self.infected:
+        if self.infected and not self.quarentine:
             self.quarentine = True
             for child in self.tracable:
                 child.trace(complete)
@@ -28,11 +28,14 @@ class Node:
         """
         newChildren = []
         if not self.quarentine:
+            if self.infected and self.age > 2:
+                self.trace(False)
             if self.age > 7:
                 self.infected = False
-            num = random.poisson(lam=3)
-            for i in range(num):
-                newChildren.append(self.addChild())
+            if not self.quarentine:
+                num = random.poisson(lam=3)
+                for i in range(num):
+                    newChildren.append(self.addChild())
         self.age = self.age + 1
         return newChildren
 
@@ -43,7 +46,7 @@ class Node:
         """
         infected = True if self.infected and random.rand() < 0.5 else False
         child = Node(_id, self, infected, 0, False)
-        if random.rand() < 0.75:
+        if random.rand() < 0.85:
             self.tracable.append(child)
         else:
             self.untracable.append(child)
@@ -81,7 +84,7 @@ class Node:
         return num
 
     def __str__(self):
-        return '<id={}, trace={}, untrace={}, infected={}, quarentine={}>'.format(self.id, self.tracable, self.untracable, self.quarentine)
+        return '<id={}, trace={}, untrace={}, infected={}, quarentine={}>'.format(self.id, self.tracable, self.untracable, self.infected, self.quarentine)
     
     def __repr__(self):
         return '<id={}, infected={}, quarentine={}>'.format(self.id, self.infected, self.quarentine)

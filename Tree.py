@@ -9,7 +9,8 @@ class Tree:
     def step(self):
         newActivation = self.activation
         for node in self.activation:
-            newActivation = newActivation + node.step()
+            if node.infected:
+                newActivation = newActivation + node.step()
         self.activation = newActivation
     
     def numNodes(self):
