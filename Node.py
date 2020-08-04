@@ -10,11 +10,11 @@ class Node:
         self.infected = infected
         self.numContacs = 0
     
-    def trace(self, complete):
+    def trace(self, complete=False):
         """
         Contact tracing method. Takes in a parameter to do a complete tracing or not (whether to have broken links)
         """
-        if self.infected and not self.quarentine:
+        if self.infected and not self.quarentine:   #Tracing testing probability
             self.quarentine = True
             for child in self.tracable:
                 child.trace(complete)
@@ -28,10 +28,13 @@ class Node:
         """
         newChildren = []
         if not self.quarentine:
-            if self.infected and self.age > 2:
+            #Contact Tracing
+            if self.infected and self.age > 2:  #Detection prob
                 self.trace(False)
+            #Recovery
             if self.age > 7:
                 self.infected = False
+            #Spread
             if not self.quarentine:
                 num = random.poisson(lam=3)
                 for i in range(num):
@@ -46,7 +49,7 @@ class Node:
         """
         infected = True if self.infected and random.rand() < 0.5 else False
         child = Node(_id, self, infected, 0, False)
-        if random.rand() < 0.85:
+        if random.rand() < 0.85:    # Alpha - contact tracing probability
             self.tracable.append(child)
         else:
             self.untracable.append(child)
