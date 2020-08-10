@@ -1,5 +1,10 @@
 import numpy.random as random
+id = 0
+
 class Node: 
+    """
+        Node class that represents a single individual in the network
+    """
     def __init__(self, _id=-1, parent=None, infected=False, age=0, quarentine=False):
         self.tracable = []
         self.untracable = []
@@ -8,7 +13,6 @@ class Node:
         self.age = age
         self.quarentine = quarentine
         self.infected = infected
-        self.numContacs = 0
     
     def trace(self, complete=False):
         """
@@ -53,7 +57,6 @@ class Node:
             self.tracable.append(child)
         else:
             self.untracable.append(child)
-        self.numContacs = self.numContacs + 1
         return child
  
     def numNodes(self):
