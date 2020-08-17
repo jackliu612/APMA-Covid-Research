@@ -4,11 +4,12 @@ _id = 0
 
 
 class Node:
+    test = 0
     """
         Node class that represents a single individual in the network
     """
 
-    def __init__(self, parent=None, infected=False, quarantine=False):
+    def __init__(self, parent=None, infected=False, quarantine=False, detectionProb=0.8, infectionProb=0.5, tracingProb=0.75):
         global _id
         self.tracable = []
         self.untracable = []
@@ -18,6 +19,9 @@ class Node:
         self.age = 0
         self.quarantine = quarantine
         self.infected = infected
+        self.detectionProb = detectionProb
+        self.infectionProb = infectionProb
+        self.tracingProb = tracingProb
 
     def traceBack(self, complete=False, verbose=False):
         """
@@ -57,7 +61,7 @@ class Node:
         newChildren = []
         if not self.quarantine:
             # Contact Tracing
-            if self.infected and self.age >= 2 and random.rand() < 0.8:  # Detection prob
+            if self.infected and self.age >= 2 and random.rand() < self.detectionProb:  # Detection prob
                 if verbose:
                     print('{} was detected!'.format(self.id))
                 self.traceBack(verbose=verbose).traceForward(verbose=verbose)
@@ -78,9 +82,9 @@ class Node:
         """
         Creates a new child and returns it
         """
-        infected = True if self.infected and random.rand() < 0.5 else False
-        child = Node(self, infected, False)
-        if random.rand() < 0.5:  # Alpha - contact tracing probability
+        infected = True if self.infected and random.rand() < self.infectionProb else False
+        child = Node(self, infected, False, self.detectionProb, self.infectionProb, self.tracingProb)
+        if random.rand() < self.tracingProb:  # Alpha - contact tracing probability
             self.tracable.append(child)
             if verbose:
                 print('{} ===> {}'.format(self.id, child.id) + ("*" if child.infected else ""))
