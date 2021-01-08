@@ -3,5 +3,5 @@ env/
 __pycache__/
 .idea/
 .vscode/
-graph.png
-todo.txt
+*.txt
+*.png

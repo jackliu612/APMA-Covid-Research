@@ -49,6 +49,8 @@ class Node:
                 print('--{} traced'.format(self.id))
             self.quarantine = True
             for child in self.tracable:
+                # if complete or random.rand() < self.detectionProb:
+                #     child.traceForward(complete=complete, verbose=verbose)
                 child.traceForward(complete=complete, verbose=verbose)
             if complete:
                 for child in self.untracable:
@@ -61,7 +63,7 @@ class Node:
         newChildren = []
         if not self.quarantine:
             # Contact Tracing
-            if self.infected and self.age >= 2 and random.rand() < self.detectionProb:  # Detection prob
+            if self.infected and self.age == 2 and random.rand() < self.detectionProb:  # Detection prob
                 if verbose:
                     print('{} was detected!'.format(self.id))
                 self.traceBack(verbose=verbose).traceForward(verbose=verbose)

@@ -2,7 +2,7 @@ from Node import Node
 
 
 class Tree:
-    def __init__(self, detectionProb=0.8, infectionProb=0.5, tracingProb=0.75):
+    def __init__(self, detectionProb=0.8, infectionProb=0.18, tracingProb=0.75):
         self.root = Node(infected=True, detectionProb=detectionProb, infectionProb=infectionProb, tracingProb=tracingProb)
         self.activation = [self.root]
         self.nodes = (1, 0)
