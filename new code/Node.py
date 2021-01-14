@@ -1,4 +1,5 @@
 import numpy.random as random
+from Distribution import *
 
 _id = 0
 
@@ -9,7 +10,7 @@ class Node:
         Node class that represents a single individual in the network
     """
 
-    def __init__(self, parent=None, infected=False, quarantine=False, detectionProb=0.8, infectionProb=0.5, tracingProb=0.75):
+    def __init__(self, parent=None, infected=False, quarantine=False, detectionProb=0.8, infectionProb=0.5, tracingProb=0.75, b=2, distribution=Poisson(3)):
         global _id
         self.tracable = []
         self.untracable = []
@@ -22,6 +23,8 @@ class Node:
         self.detectionProb = detectionProb
         self.infectionProb = infectionProb
         self.tracingProb = tracingProb
+        self.b = b
+        self.distribution = distribution
 
     def traceBack(self, complete=False, verbose=False):
         """
@@ -49,9 +52,9 @@ class Node:
                 print('--{} traced'.format(self.id))
             self.quarantine = True
             for child in self.tracable:
-                # if complete or random.rand() < self.detectionProb:
-                #     child.traceForward(complete=complete, verbose=verbose)
-                child.traceForward(complete=complete, verbose=verbose)
+                if complete or random.rand() < self.detectionProb:
+                    child.traceForward(complete=complete, verbose=verbose)
+                # child.traceForward(complete=complete, verbose=verbose)
             if complete:
                 for child in self.untracable:
                     child.traceForward(complete=complete, verbose=verbose)
@@ -63,7 +66,7 @@ class Node:
         newChildren = []
         if not self.quarantine:
             # Contact Tracing
-            if self.infected and self.age == 2 and random.rand() < self.detectionProb:  # Detection prob
+            if self.infected and self.age >= self.b and random.rand() < self.detectionProb:  # Detection prob
                 if verbose:
                     print('{} was detected!'.format(self.id))
                 self.traceBack(verbose=verbose).traceForward(verbose=verbose)
@@ -73,8 +76,8 @@ class Node:
                     print('{} recovered'.format(self.id))
                 self.quarantine = True
             # Spread
-            if not self.quarantine and self.age <= 2:
-                num = random.poisson(lam=3 - self.age)
+            if not self.quarantine and self.age <= self.b:
+                num = self.distribution.next()
                 for i in range(num):
                     newChildren.append(self.addChild(verbose))
         self.age = self.age + 1
@@ -85,7 +88,7 @@ class Node:
         Creates a new child and returns it
         """
         infected = True if self.infected and random.rand() < self.infectionProb else False
-        child = Node(self, infected, False, self.detectionProb, self.infectionProb, self.tracingProb)
+        child = Node(self, infected, False, self.detectionProb, self.infectionProb, self.tracingProb, self.b, self.distribution)
         if random.rand() < self.tracingProb:  # Alpha - contact tracing probability
             self.tracable.append(child)
             if verbose:

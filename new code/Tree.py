@@ -1,9 +1,10 @@
 from Node import Node
+from Distribution import *
 
 
 class Tree:
-    def __init__(self, detectionProb=0.8, infectionProb=0.18, tracingProb=0.75):
-        self.root = Node(infected=True, detectionProb=detectionProb, infectionProb=infectionProb, tracingProb=tracingProb)
+    def __init__(self, detectionProb=0.8, infectionProb=0.18, tracingProb=0.75, b=2, distribution=Poisson(3)):
+        self.root = Node(infected=True, detectionProb=detectionProb, infectionProb=infectionProb, tracingProb=tracingProb, b=b, distribution=distribution)
         self.activation = [self.root]
         self.nodes = (1, 0)
         self.infected = (0, 1)

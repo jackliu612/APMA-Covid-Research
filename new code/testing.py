@@ -3,7 +3,7 @@ import statistics
 from Node import *
 from Tree import *
 
-t = Tree(tracingProb=0.3)
+t = Tree(infectionProb=.5, tracingProb=0.3)
 print(t)
 for i in range(15):
     t.step(False)
