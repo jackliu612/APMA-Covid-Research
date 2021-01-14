@@ -52,9 +52,9 @@ class Node:
                 print('--{} traced'.format(self.id))
             self.quarantine = True
             for child in self.tracable:
-                if complete or random.rand() < self.detectionProb:
-                    child.traceForward(complete=complete, verbose=verbose)
-                # child.traceForward(complete=complete, verbose=verbose)
+                # if complete or random.rand() < self.detectionProb:
+                #     child.traceForward(complete=complete, verbose=verbose)
+                child.traceForward(complete=complete, verbose=verbose)
             if complete:
                 for child in self.untracable:
                     child.traceForward(complete=complete, verbose=verbose)

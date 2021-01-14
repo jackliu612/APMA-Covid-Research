@@ -3,13 +3,13 @@ from Distribution import *
 import statistics
 import numpy as np
 
-dP_range = np.arange(.8, 1.01, .1)
+dP_range = np.arange(.5, 1.01, .1)
 cT_range = np.arange(.6, 1.01, .01)
 
 batches = 5
 batchSize = 100
 steps = 14
-with open('b1.txt', 'a') as file:
+with open('b2.txt', 'a') as file:
     for dP in dP_range:
         print(dP)
         for cT in cT_range:
@@ -18,7 +18,7 @@ with open('b1.txt', 'a') as file:
             for x in range(batches):
                 success = 0
                 for i in range(batchSize):
-                    t = Tree(infectionProb=.5, detectionProb=dP, tracingProb=cT, b=1)
+                    t = Tree(infectionProb=.5, detectionProb=dP, tracingProb=cT, b=2)
                     for s in range(steps):
                         t.step()
                         if t.isDone():
