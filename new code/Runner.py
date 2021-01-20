@@ -4,12 +4,12 @@ import statistics
 import numpy as np
 
 dP_range = np.arange(.5, 1.01, .1)
-cT_range = np.arange(.6, 1.01, .01)
+cT_range = np.arange(.6, 1.01, .05)
 
-batches = 5
+batches = 1
 batchSize = 100
 steps = 14
-with open('b2.txt', 'a') as file:
+with open('poisson3.txt', 'a') as file:
     for dP in dP_range:
         print(dP)
         for cT in cT_range:
@@ -18,7 +18,7 @@ with open('b2.txt', 'a') as file:
             for x in range(batches):
                 success = 0
                 for i in range(batchSize):
-                    t = Tree(infectionProb=.5, detectionProb=dP, tracingProb=cT, b=2)
+                    t = Tree(infectionProb=.5, detectionProb=dP, tracingProb=cT, b=2, distribution=Poisson(3))
                     for s in range(steps):
                         t.step()
                         if t.isDone():
@@ -33,6 +33,6 @@ with open('b2.txt', 'a') as file:
 
             print('---------- FINAL RESULTS ----------')
             print('Mean:\t{}%'.format(statistics.mean(data)))
-            print('SD:\t\t{}'.format(statistics.stdev(data)))
+            # print('SD:\t\t{}'.format(statistics.stdev(data)))
             print('-----------------------------------')
         file.write('\n')
